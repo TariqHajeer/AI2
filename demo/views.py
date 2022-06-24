@@ -5,7 +5,7 @@ from os import mkdir
 import this
 from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
-from demo.Astar import makedict,astar,romania
+from demo.Astar import map,astar
 
 
 # Create your views here.
@@ -16,11 +16,11 @@ def home(request):
         countrymap = request.POST["map"]
         datafromJson= json.loads(countrymap)
         
-        
+        m = map()
         for d in datafromJson:
-            makedict(d["from"],d["to"],int( d["value"]))
+            m.mkdir(d["from"],d["to"],int( d["value"]))
 
-        return HttpResponse(json.dumps(romania))
+        return HttpResponse(json.dumps( astar(fromCity,toCity,m)))
     
     return render(request,'home.html',{"name":'taaa'})
 

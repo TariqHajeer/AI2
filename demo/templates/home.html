@@ -63,6 +63,15 @@
                 <button class="btn btn-primary" onclick="getPath()">Get Path</button>
             </div>
         </div>
+        <div class="row">
+            <div class="col-lg-4">
+                Total distance
+                <label id="dis"></label>
+            </div>
+            <div class="col-lg-8" >
+                path:<label id="path"></label>
+            </div>
+        </div>
     </div>
 
 </body>
@@ -85,6 +94,8 @@
     let head = document.getElementById('head');
     var from = document.getElementById('from');
     var to = document.getElementById('to');
+    let dis = document.getElementById("dis");
+    let path = document.getElementById("path");
     function AddCountry() {
         var text = countryTxt.val();
         if (text == '') {
@@ -184,12 +195,14 @@
             from: fromCity,
             to: toCity
         }
+        
         $.post(
             '',
             request,
             function (res) {
-                var result = console.log(JSON.stringify(res));
-                console.log(result);
+                var reult= JSON.parse(res)
+                dis.innerText = reult.totalDistance;
+                path.innerText=reult.path.join(', ');
             }
         )
     }
