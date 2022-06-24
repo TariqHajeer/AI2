@@ -69,10 +69,16 @@
 
 <script>
     function addCountries() {
-        for (var i = 0; i < 5; i++) {
-            countryTxt.val('c' + i);
-            AddCountry();
-        }
+        countryTxt.val('Damascus');
+        AddCountry();
+        countryTxt.val('Homs');
+        AddCountry();
+        countryTxt.val('Alepo');
+        AddCountry();
+        countryTxt.val('Daraa');
+        AddCountry();
+        countryTxt.val('Hama');
+        AddCountry();
     }
     let countryTxt = $('#countryTxt');
     let body = document.getElementById('body');
@@ -182,7 +188,8 @@
             '',
             request,
             function (res) {
-                console.log(res);
+                var result = console.log(JSON.stringify(res));
+                console.log(result);
             }
         )
     }
