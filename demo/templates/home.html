@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <style>
+        .row {
+            margin-top: 100px;
+        }
+    </style>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+
+    <div class="jumbotron text-center">
+        <h1>Wlcome To A star algorithm</h1>
+        <h2>the header represent from city and rows represent to city</h2>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <input type="text" class="form-control" placeholder="Country Name" id="countryTxt">
+            </div>
+            <div class="col-lg-4">
+                <button class="btn btn-primary" onclick="AddCountry()"> Add</button>
+            </div>
+        </div>
+        <div class="row" style="height: 300px; overflow: auto; width: 100%; ">
+            <table class="table table-responsive">
+                <thead id="head">
+                    <tr>
+                        <th>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="body">
+
+                </tbody>
+            </table>
+        </div>
+        <div class="row">
+            <div class="col-lg-4">
+                <select id="from" class="form-control" onchange="choseFrom()">
+                    <option>--from--</option>
+                </select>
+            </div>
+            <div class="col-lg-4">
+                <select id="to" class="form-control">
+                    <option>--to--</option>
+                </select>
+            </div>
+            <div class="col-lg-4">
+                <button class="btn btn-primary" onclick="getPath()">Get Path</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+<script>
+    function addCountries() {
+        for (var i = 0; i < 5; i++) {
+            countryTxt.val('c' + i);
+            AddCountry();
+        }
+    }
+    let countryTxt = $('#countryTxt');
+    let body = document.getElementById('body');
+    let head = document.getElementById('head');
+    var from = document.getElementById('from');
+    var to = document.getElementById('to');
+    function AddCountry() {
+        var text = countryTxt.val();
+        if (text == '') {
+            return;
+        }
+        if (countries.includes(text))
+            return;
+        countries.push(text);
+        var headRwo = head.getElementsByTagName('tr')[0];
+        var th = document.createElement('th');
+        th.innerHTML = text;
+        headRwo.append(th);
+
+        var rows = body.getElementsByTagName('tr');
+        for (var i = 0; i < rows.length; i++) {
+            var row = rows[i];
+            var input = document.createElement('input');
+            input.setAttribute('type', 'number');
+            input.setAttribute('value', 0);
+            input.setAttribute('mim', 0);
+            var td = document.createElement('td');
+            td.append(input);
+            row.append(td);
+        }
+        var row = document.createElement('tr');
+        body.append(row);
+        var td = document.createElement('td');
+        td.innerHTML = text;
+        row.append(td);
+        countries.forEach(c => {
+            var input = document.createElement('input');
+            input.setAttribute('value', 0);
+            input.setAttribute('type', 'number');
+            input.setAttribute('mim', 0);
+            var td = document.createElement('td');
+            td.append(input);
+            row.append(td);
+        })
+        countryTxt.val('');
+
+        $('#from')
+            .find('option')
+            .remove()
+            .end()
+            .append('<option value="">--from--</option>')
+        $('#to')
+            .find('option')
+            .remove()
+            .end()
+            .append('<option value="">--to--</option>')
+        countries.forEach(c => {
+            var option = document.createElement('option');
+            option.innerText = c;
+            option.value = c;
+            from.append(option);
+        });
+
+    }
+    function choseFrom() {
+        $('#to')
+            .find('option')
+            .remove()
+            .end()
+            .append('<option value="">--to--</option>')
+        countries.filter(c => c != $('#from').val()).forEach(c => {
+            var option = document.createElement('option');
+            option.innerText = c;
+            option.value = c;
+            to.append(option);
+        });
+
+    }
+
+    var countries = [];
+    addCountries();
+    function getPath() {
+        var fromCity = from.value;
+        var toCity = to.value;
+        if (fromCity == '' || toCity == '')
+            return;
+        var array = [];
+        var th = head.getElementsByTagName('th');
+        for (var i = 1; i < th.length; i++) {
+            var fromCitykey = th[i].innerText;
+            var rows = body.getElementsByTagName('tr');
+            for (var j = 0; j < rows.length; j++) {
+                var tds = rows[j].getElementsByTagName('td');
+                var toTd = tds[0];
+                var valueTd = tds[i];
+                array.push({ from: fromCitykey, to: toTd.innerText, value: valueTd.getElementsByTagName('input')[0].value })
+            }
+        }
+        var request = {
+            map: JSON.stringify(array),
+            csrfmiddlewaretoken: "{{ csrf_token }}",
+            state: "inactive",
+            from: fromCity,
+            to: toCity
+        }
+        $.post(
+            '',
+            request,
+            function (res) {
+                console.log(res);
+            }
+        )
+    }
+</script>
+
+</html>
