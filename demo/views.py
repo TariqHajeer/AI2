@@ -13,9 +13,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 
 def home(request):
-    return render(request, 'home.html')
-
-def path(request):
     if(request.method == 'POST'):
         fromCity = request.POST["from"]
         toCity = request.POST["to"]
@@ -27,5 +24,6 @@ def path(request):
                 m.mkdir(d["from"], d["to"], int(d["value"]))
 
         return HttpResponse(json.dumps(astar(fromCity, toCity, m)))
-    else:
-        return Http404()
+
+    return render(request, 'home.html')
+
