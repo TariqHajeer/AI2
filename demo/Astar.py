@@ -47,7 +47,7 @@ def astar(start, end, map: map):
         if (current == end):
             break    
         if(current not in map.rmap):
-            continue;
+            continue
         for new in map.rmap[current]:
             g_cost = distance[current] + int(new.distance)
 
@@ -63,7 +63,7 @@ def output(start, end, path, distance):
     finalpath = []
     i = end
     if(end not in distance):
-        return {"path":"not found","totalDistance":"not found"}
+        return {"path":["not found"],"totalDistance":"not found"}
     while (path.get(i) != None):
         finalpath.append(i)
         i = path[i]

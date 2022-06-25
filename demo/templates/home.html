@@ -31,8 +31,11 @@
             <div class="col-lg-8">
                 <input type="text" class="form-control" placeholder="Country Name" id="countryTxt">
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-2">
                 <button class="btn btn-primary" onclick="AddCountry()"> Add</button>
+            </div>
+            <div class="col-lg-2">
+                <button class="btn btn-danger" onclick="ResetTable()">Rest Table</button>
             </div>
         </div>
         <div class="row" style="height: 300px; overflow: auto; width: 100%; ">
@@ -68,7 +71,7 @@
                 Total distance
                 <label id="dis"></label>
             </div>
-            <div class="col-lg-8" >
+            <div class="col-lg-8">
                 path:<label id="path"></label>
             </div>
         </div>
@@ -77,6 +80,15 @@
 </body>
 
 <script>
+    function ResetTable() {
+        head.innerHTML = "";
+        var row = document.createElement("tr");
+        var th = document.createElement("th");
+        row.append(th);
+        head.append(row);
+        body.innerHTML = "";
+        countries = []
+    }
     function addCountries() {
         countryTxt.val('Damascus');
         AddCountry();
@@ -133,7 +145,7 @@
             var td = document.createElement('td');
             td.append(input);
             row.append(td);
-        })
+        });
         countryTxt.val('');
 
         $('#from')
@@ -195,14 +207,15 @@
             from: fromCity,
             to: toCity
         }
-        
+
         $.post(
-            '',
+            'getpath',
             request,
             function (res) {
-                var reult= JSON.parse(res)
+                console.log(res)
+                var reult = JSON.parse(res)
                 dis.innerText = reult.totalDistance;
-                path.innerText=reult.path.join(', ');
+                path.innerText = reult.path.join(', ');
             }
         )
     }
